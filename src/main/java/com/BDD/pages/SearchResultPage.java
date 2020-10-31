@@ -27,6 +27,9 @@ public class SearchResultPage extends TestBase {
 	@FindBy(xpath = "//*[@class='mini-cart mini-cart-module_mini-cart_3_CNC']")
 	WebElement cartButton;
 
+	@FindBy(xpath = "//button[contains(text(),'Load More')]")
+	WebElement loadMoreButton;
+
 	public SearchResultPage() {
 		PageFactory.initElements(driver, this);
 	}
@@ -67,5 +70,11 @@ public class SearchResultPage extends TestBase {
 	public CartPage navigateToCartPage() {
 		cartButton.click();
 		return new CartPage();
+	}
+
+	public void loadMoreProducts() {
+		new WebDriverWait(driver, Constants.EXPLICIT_WAIT)
+				.until(ExpectedConditions.elementToBeClickable(loadMoreButton));
+		loadMoreButton.click();
 	}
 }

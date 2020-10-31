@@ -36,6 +36,9 @@ public class RegisterPage extends TestBase {
 
 	@FindBy(name = "registerButton")
 	WebElement registerButton;
+	
+	@FindBy(xpath="//*[@id='welcome']/h3")
+	WebElement welcomeMsg;
 
 	public RegisterPage() {
 		PageFactory.initElements(driver, this);
@@ -52,5 +55,9 @@ public class RegisterPage extends TestBase {
 		retypePassword.sendKeys(userData.get(3));
 		mobileNumber.sendKeys(userData.get(4));
 		registerButton.click();
+	}
+
+	public String getSuccessMsg() {
+		return welcomeMsg.getText();
 	}
 }

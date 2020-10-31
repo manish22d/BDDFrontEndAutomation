@@ -3,6 +3,7 @@ package com.BDD.testSteps;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasItems;
 
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class TakealotSteps extends TestBase {
 
 	@Then("^Verify user is registered$")
 	public void clicked_on_product() {
-
+		assertThat(registerPage.getSuccessMsg(), is(equalTo("Welcome to the TAKEALOT.com family!")));
 	}
 
 	@Given("^I want to search for \"([^\"]*)\"$")
@@ -58,13 +59,15 @@ public class TakealotSteps extends TestBase {
 
 	@When("^I add watches in my cart$")
 	public void i_add_watches_in_my_cart(List<String> productName) {
-		productName.forEach(product -> searchPage.addProductToCart(product));
+		searchPage.addProductToCart(productName.get(0));
+		searchPage.loadMoreProducts();
+		searchPage.addProductToCart(productName.get(1));
 	}
 
 	@Then("^Verify given products added to my cart$")
 	public void verify_given_products_added_to_my_cart(List<String> productName) {
 		cartPage = searchPage.navigateToCartPage();
-		assertThat(productName, is(equalTo(cartPage.getListOfProductInCart())));
+		assertThat("Item did not matched", is(productName.containsAll(cartPage.getListOfProductInCart())));
 	}
 
 }
