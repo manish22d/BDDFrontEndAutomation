@@ -15,18 +15,11 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.log4testng.Logger;
 
 import com.BDD.Constant.Constants;
-import com.BDD.util.TestUtility;
 import com.BDD.util.WebEventListener;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
-import com.relevantcodes.extentreports.LogStatus;
 
 public class TestBase {
 
@@ -34,13 +27,11 @@ public class TestBase {
 	public static Properties property;
 	public static ChromeOptions chromeOptions;
 	public static EventFiringWebDriver e_driver;
-	public static Logger Log;
 	public static ExtentReports extent;
 	public static ExtentTest extentTest;
 	public static WebEventListener eventListener;
 
 	public TestBase() {
-		Log = Logger.getLogger(this.getClass());
 		try {
 			property = new Properties();
 			FileInputStream inputStream = new FileInputStream(
@@ -51,18 +42,6 @@ public class TestBase {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@BeforeTest
-	public void setLog4j() {
-		TestUtility.setDateForLog4j();
-
-		extent = new ExtentReports(
-				System.getProperty("user.dir") + "/AutomationReport/" + TestUtility.getSystemDate() + ".html");
-		extent.addSystemInfo("Host Name", "Manish Windows System");
-		extent.addSystemInfo("User Name", "Manish");
-		extent.addSystemInfo("Environment", "Automation Test Report");
-
 	}
 
 	public static void initialization() {
@@ -106,40 +85,4 @@ public class TestBase {
 
 	}
 
-	@AfterTest
-	public void endReport() {
-		extent.flush();
-		extent.close();
-	}
-
-	@AfterMethod(alwaysRun = true)
-	public void tearDown(ITestResult result) throws IOException {
-		System.out.println(result);
-		Log.info("Browser Terminated");
-		Log.info("-----------------------------------------------");
-		if (result.getStatus() == ITestResult.FAILURE) {
-			extentTest.log(LogStatus.FAIL, "Test Case Failed is " + result.getName()); // To Add Name in Extent Report.
-			extentTest.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable()); // To Add Errors and
-																							// Exceptions in Extent
-																							// Report.
-
-			String screenshotPath = TestUtility.getScreenshot(driver, result.getName());
-			extentTest.log(LogStatus.FAIL, extentTest.addScreenCapture(screenshotPath)); // To Add Screenshot in Extent
-																							// Report.
-		} else if (result.getStatus() == ITestResult.SKIP) {
-			extentTest.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
-		} else if (result.getStatus() == ITestResult.SUCCESS) {
-			extentTest.log(LogStatus.PASS, "Test Case Passed is " + result.getName());
-		}
-		extent.endTest(extentTest); // Ending Test and Ends the Current Test and Prepare to Create HTML Report.
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-//		driver.quit();
-		Log.info("Browser Terminated");
-		Log.info("-----------------------------------------------");
-	}
 }

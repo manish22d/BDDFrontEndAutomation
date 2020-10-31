@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,7 +15,7 @@ import com.BDD.testBase.TestBase;
 
 public class SearchResultPage extends TestBase {
 
-	@FindBy(xpath = "//*[@class='cell small-3']")
+	@FindBy(xpath = "//*[@class='cell small-3']//a/h4/span/span[1]")
 	List<WebElement> productList;
 
 	@FindBy(xpath = "//*[@class='filter-facet-module_filter-item_3bvm8']//span")
@@ -51,10 +52,10 @@ public class SearchResultPage extends TestBase {
 	public void addProductToCart(String productName) {
 		new WebDriverWait(driver, Constants.EXPLICIT_WAIT).until(ExpectedConditions.visibilityOf(productList.get(0)));
 		for (int i = 0; i < productList.size(); i++) {
-			System.out.println(
-					productList.get(i).findElement(By.xpath("//a/h4/span/span[1]")).getText() + " " + productName);
-			if (productList.get(i).findElement(By.xpath("//a/h4/span/span[1]")).getText().equals(productName)) {
-				productList.get(i).click();
+			System.out.println(productList.get(i).getText() + " " + productName);
+			if (productList.get(i).getText().equals(productName)) {
+				Actions act = new Actions(driver);
+				act.moveToElement(productList.get(i)).click().build().perform();
 				break;
 			}
 		}
