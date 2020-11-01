@@ -19,6 +19,12 @@ public class CartPage extends TestBase {
 	}
 
 	public List<String> getListOfProductInCart() {
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return productList.stream().map(product -> product.getText()).collect(Collectors.toList());
 	}
 }

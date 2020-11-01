@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.hasItems;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.BDD.pages.CartPage;
@@ -67,7 +68,9 @@ public class TakealotSteps extends TestBase {
 	@Then("^Verify given products added to my cart$")
 	public void verify_given_products_added_to_my_cart(List<String> productName) {
 		cartPage = searchPage.navigateToCartPage();
-		assertThat("Item did not matched", is(productName.containsAll(cartPage.getListOfProductInCart())));
+		List<String> itemInCart = cartPage.getListOfProductInCart();
+		Collections.sort(itemInCart);
+		assertThat("Item in cart is not matching", productName.containsAll(itemInCart));
 	}
 
 }
