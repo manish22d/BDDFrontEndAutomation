@@ -7,6 +7,8 @@ import static org.hamcrest.Matchers.is;
 import java.util.Collections;
 import java.util.List;
 
+import org.openqa.selenium.By;
+
 import com.BDD.pages.CartPage;
 import com.BDD.pages.HomePage;
 import com.BDD.pages.RegisterPage;
@@ -29,6 +31,9 @@ public class TakealotSteps extends TestBase {
 		initialization();
 		driver.get(url);
 		homePage = new HomePage();
+		if(homePage.isModalDisplayed()) {
+			homePage.closeModal();
+		}
 	}
 
 	@Given("^I navigate to registration page$")

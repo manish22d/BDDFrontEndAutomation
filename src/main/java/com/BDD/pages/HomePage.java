@@ -19,9 +19,25 @@ public class HomePage extends TestBase {
 	
 	@FindBy(xpath = "//button[@type='submit']")
 	WebElement searchButton;
-
+	
+	@FindBy(xpath="//button[@class='modal-module_close-button_asjao']")
+	WebElement modalCloseButton;
+	
 	public HomePage() {
 		PageFactory.initElements(driver, this);
+	}
+	
+	public boolean isModalDisplayed() {
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return modalCloseButton.isDisplayed();
+	}
+	
+	public void closeModal() {
+		modalCloseButton.click();
 	}
 
 	public RegisterPage navigateToRegisterPage() {
